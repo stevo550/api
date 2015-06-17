@@ -37,7 +37,7 @@ class Alert < ActiveRecord::Base
   after_commit :cache_alert_data, on: [:create, :update]
 
   def cache_alert_data
-    order_item.update_attributes latest_alert_id: id
+    order_item.update_attributes latest_alert_id: id unless order_item.nil?
     project.compute_current_status! unless project.nil?
   end
 end
