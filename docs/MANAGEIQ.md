@@ -1,13 +1,13 @@
-## How to create ManageIQ Automation Scripts
+# ManageIQ Automation Scripts
 Jellyfish is utilizing the Service Catalog and Automation capabilities provided by ManageIQ to automate the provisioning of additional cloud services. This guide will walk you through the steps of creating catalog items and automation scripts, and then retrieving the information necessary about a catalog item to interact with jellyfish-core.
 
-####Download and Install ManageIQ
+## Download and Install ManageIQ
 Follow the steps provided here: http://manageiq.org/download/
 
-###Creating an Automation Script
+## Creating an Automation Script
 The following steps will guide you through the process of creating an automation method, adding it to a Service Provisioning Template, and then adding them to a Catalog Item. These steps allow them to interact with Jellyfish-UX and Jellyfish-Core. The automation scripts provided are located in in jellyfish-core/app/view/automate. 
 
-####Automation Basics
+##### Automation Basics
 Here are some general basics to understand the automation scripts provided through jellyfish-core. 
 
 **Global Variables**
@@ -31,7 +31,7 @@ To run the provided scripts, you need the aws (http://aws.amazon.com/sdk-for-rub
 
 For more information regarding automation, such as definitions and additional terminology, please see ManageIQs automation guide: http://manageiq.org/pdf/ManageIQ-0-Lifecycle_and_Automation_Guide-en-US.pdf
 
-####Adding an Automate Method
+#### Adding an Automate Method
 1. Once logged into ManageIQ, select **Explorer** under the **Automation** menu.
 2. From the left side **Datastore** menu, select the Methods class located under Datastore/[your domain]/Service/Provisioning/StateMachines.
 3. Select **Add a new instance** from the **Configuration** menu.
@@ -45,13 +45,13 @@ For more information regarding automation, such as definitions and additional te
 11. Paste in a method that has been provided, or one of your own.
 12. Click 'Add' from the bottom right hand corner.
 
-####Adding to a Provisioning Template
+##### Adding to a Provisioning Template
 1. Under the left side **Datastore** menu, select the **ServiceProvision_Template** class.
 2. Under the **Configuration** menu, select **Add a new instance**
 3. Name your new instance. **Display Name** and **Description** are optional.
 4. The template is where you supply the method to be executed for a particular service. The provisioning script will go in the **Value** box of the 'provision' field. Also provided with this template are options for pre and post script execution methods.
 
-####Adding a Catalog Item
+##### Adding a Catalog Item
 1. Select **Catalog** under the **Services** menu.
 2. Select **Catalogs** from the left hand side menu.
 3. From the configuration menu, select **Add a New Catalog**
@@ -66,7 +66,7 @@ For more information regarding automation, such as definitions and additional te
 12. Select the **Provisioning Entry Point** to be the Provisioning Template you created under Datastore/[your domain]/Service/Provisioning/StateMachines
 13. For **Reconfigure** and **Retirement** entry points, you may select the default. 
 
-####Adding a Dialog
+##### Adding a Dialog
 1. Select **Customization** under the **Automation** menu.
 2. On the left hand side, select **Service Dialogs**.
 3. From the **Configuration** menu, select **Add a new Dialog**
@@ -79,10 +79,10 @@ For more information regarding automation, such as definitions and additional te
 10. Label and name your boxes. The name of the box is the value that will be passed through to your automation script. Depending on the type of Element that you choose, you will have different options.
 11. When complete, select **Save** from the bottom right hand corner. 
 
-###Using the ManageIQ API to retrieve Catalog Item properties
+## Using the ManageIQ API to retrieve Catalog Item properties
 You will need properties Catalog Item properties to configure the use of jellyfish-core and ManageIQ through the UX. These properties that you need can be retrieved using the ManageIQ API as outlined below. The full ManageIQ REST API is available here: http://manageiq.org/documentation/development/rest_api/reference/
 
-####Finding Available Catalog Service Items
+##### Finding Available Catalog Service Items
 To retrieve a list of all available service items, make a request to
 ````
 GET /api/service_templates/
@@ -94,6 +94,6 @@ GET /api/service_templates/[catalog_id]
 ````
 The **catalog_id** is what is needed to configure products. This value is the ManageIQ Type ID field on the Edit Products page. 
 
-####Retirement
+##### Retirement
 For the automation methods currently provided in jellyfish-core, each one requires a separate Catalog Item with the appropriate retirement method included. 
 
