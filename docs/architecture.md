@@ -5,7 +5,7 @@ Project Jellyfish is made up of numerous parts, working in concert to make it as
 
 
 
-####Jellyfish Core:
+#### Jellyfish Core
 
 * The Jellyfish Core, built on the Ruby on Rails framework, combines the API and UX. 
 * The API is a fully scalable REST server that powers the Jellyfish UX and Jellyfish Mobile, and is the work horse of Project Jellyfish.
@@ -15,28 +15,28 @@ Project Jellyfish is made up of numerous parts, working in concert to make it as
 
 
 
-####Mobile App:
+#### Mobile App
 
 * The app will interface with the Jellyfish Core via the REST API providing basic functionality such as managing rights, accessing the catalog, and monitoring project status.
 * While the app cannot do any provisioning of services, it is a great way to manage on the go!
 
 
 
-####PostgreSQL Database:
+#### PostgreSQL Database
 
 * The PostgreSQL Database is where all the data from the API is stored.
 * When any command is made by a user, the API makes a call to the database to return the data.
 
 
 
-####Configuration Management:
+#### Configuration Management
 
 * In order to help streamline the deployment and management of the data on the servers that Jellyfish runs on, we use the configuration tool Chef.
 * Instead of manually managing our infrastructure environment, Chef automates that management and enables our team to focus on delivering Project Jellyfish.
 
 
 
-####Monitoring:
+#### Monitoring
 
 * In order to ensure that Jellyfish is properly up and running, we use IT monitoring tools like Sensu and Nagios.
 * They monitor the entire Jellyfish ecosystem, and provide us with details to minimize problems that may arise.

@@ -1,7 +1,7 @@
 FAQ
 =====
 
-####General
+##### General
 
 **What is Project Jellyfish?**
 
