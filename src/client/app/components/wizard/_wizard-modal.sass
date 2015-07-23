@@ -50,9 +50,21 @@
     display: block
     min-width: 200px
     margin: 0 auto 20px
+    position: relative
 
     &:last-child
       margin-bottom: 0
+
+    +modifier(selected)
+      &:before
+        content: ""
+        height: 0
+        left: -20px
+        position: absolute
+        width: 0
+        border: 10px solid transparent
+        border-left-color: $app-color-dark-green
+
 
   +element(footer)
     @extend .modal-footer

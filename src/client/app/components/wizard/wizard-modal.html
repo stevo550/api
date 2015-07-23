@@ -12,8 +12,10 @@
   <div ng-switch-when="wizard">
     <div class="wizard-modal__question">{{ vm.question.text }}</div>
     <div class="wizard-modal__answers">
-      <button type="button" class="btn-rounded btn-rounded--capitalize wizard-modal__button"
+      <button type="button"
+              class="btn-rounded btn-rounded--capitalize wizard-modal__button"
               ng-repeat="answer in vm.question.wizard_answers track by answer.id"
+              ng-class="{'wizard-modal__button--selected': vm.answeredQuestions[vm.questionPointer].id === answer.id}"
               ng-click="vm.answerWith($index)">
         {{ ::answer.text }}
       </button>
@@ -27,5 +29,14 @@
   </div>
 </div>
 <div class="wizard-modal__footer">
-  <button type="button" class="btn-rounded btn-rounded--gray wizard-modal__ok" ng-click="$dismiss()">Cancel</button>
+  <button type="button"
+          ng-disabled="vm.questionPointer <= 0 || vm.state !== 'wizard'"
+          class="btn-rounded wizard-modal__ok"
+          ng-click="vm.questionNavigation(-1)">Previous
+  </button>
+  <button type="button"
+          ng-disabled="vm.answeredQuestions.length <= vm.questionPointer || vm.state !== 'wizard'"
+          class="btn-rounded wizard-modal__ok"
+          ng-click="vm.questionNavigation(1)">Next
+  </button>
 </div>

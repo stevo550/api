@@ -39,10 +39,12 @@
     vm.state = 'intro';
     vm.questions = questions;
     vm.question = null;
-    vm.tags = [];
+    vm.questionPointer = 0;
+    vm.answeredQuestions = [];
 
     vm.startWizard = startWizard;
     vm.answerWith = answerWith;
+    vm.questionNavigation = questionNavigation;
 
     activate();
 
@@ -50,23 +52,36 @@
     }
 
     function startWizard() {
-      vm.question = vm.questions.shift();
+      vm.question = vm.questions[vm.questionPointer];
       vm.state = 'wizard';
     }
 
     function answerWith(index) {
-      var answer;
-
       if (0 <= index) {
-        answer = vm.question.wizard_answers[index];
-        vm.tags = lodash.without(lodash.union(vm.tags, answer.tags_to_add), answer.tags_to_remove);
+        vm.answeredQuestions[vm.questionPointer] = vm.question.wizard_answers[index];
+      } else {
+        vm.answeredQuestions[vm.questionPointer] = -1;
       }
 
-      if (vm.questions.length) {
-        vm.question = vm.questions.shift();
+      if (vm.questionPointer < vm.questions.length - 1) {
+        vm.questionNavigation(1);
       } else {
+        lodash.forEach(vm.answeredQuestions, parseQuestionAnswers);
         vm.state = 'complete';
       }
+    }
+
+    function parseQuestionAnswers(item) {
+      if (item === -1) {
+        return;
+      } else {
+        vm.tags = lodash.without(lodash.union(vm.tags, item.tags_to_add), item.tags_to_remove);
+      }
+    }
+
+    function questionNavigation(direction) {
+      vm.questionPointer = vm.questionPointer + direction;
+      vm.question = vm.questions[vm.questionPointer];
     }
   }
 })();
