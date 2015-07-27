@@ -30,6 +30,12 @@
 
     // catch any error in resolve in state
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+      // Increment the error counter for the status code
+      var errorArray = (SessionService.errorCount === undefined) ? [] : SessionService.errorCount;
+      errorArray[error.status] = (errorArray[error.status] === undefined) ? 1 : errorArray[error.status] + 1;
+      SessionService.errorCount = errorArray;
+      SessionService.lastError = error.status;
+
       // If a 401 is encountered during a state change, then kick the user back to the login
       if (401 === error.status) {
         if (AuthorizationService.isAuthenticated()) {
@@ -43,13 +49,20 @@
           $state.transitionTo('dashboard');
         }
       } else {
-        $state.go('error', { error: error });
+        $state.go('error', { error: error, errorCount: SessionService.errorCount });
         logger.error('Unhandled State Change Error occurred: ' + (error.statusText || error.message));
       }
+
       event.preventDefault();
     });
 
-    $rootScope.$on('$stateChangeSuccess', function() {
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+      // Reset the error counter on success
+      if (toParams.error === undefined && fromParams.error === undefined && SessionService.lastError !== undefined) {
+        SessionService.errorCount.splice(SessionService.errorCount.indexOf(SessionService.lastError, 1));
+        SessionService.lastError = null;
+      }
+
       jQuery('html, body').animate({scrollTop: 0}, 200);
     });
 

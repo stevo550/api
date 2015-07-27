@@ -2,6 +2,7 @@
   'use strict';
 
   angular.module('app.states')
+    .directive('backButton', historyBack)
     .run(appRun);
 
   /** @ngInject */
@@ -22,7 +23,8 @@
           layout: 'blank'
         },
         params: {
-          error: null
+          error: null,
+          errorCount: null
         }
       }
     };
@@ -33,5 +35,19 @@
     var vm = this;
 
     vm.error = $stateParams.error;
+    vm.errorCount = $stateParams.errorCount;
+  }
+
+  /** @ngInject */
+  function historyBack() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        element.on('click', function() {
+          history.back();
+          scope.$apply();
+        });
+      }
+    };
   }
 })();

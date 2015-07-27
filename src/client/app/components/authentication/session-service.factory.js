@@ -23,6 +23,8 @@
       service.email = data.email;
       service.role = data.role;
       service.updatedAt = data.updated_at;
+      service.errorCount = data.errorCount;
+      service.lastError = data.lastError;
     }
 
     function destroy() {
@@ -32,6 +34,8 @@
       service.email = null;
       service.role = null;
       service.updatedAt = null;
+      service.errorCount = null;
+      service.lastError = null;
     }
 
     // Helpers
