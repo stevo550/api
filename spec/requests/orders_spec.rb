@@ -54,7 +54,7 @@ describe 'Orders API' do
     end
 
     it 'returns an error when the order does not exist' do
-      put "/api/v1/orders/#{@order.id + 999}", options: ['test']
+      put "/api/v1/orders/#{@order.id + 999}", staff_id: Staff.all.first.id, options: ['test']
       expect(response.status).to eq(404)
       expect(json).to eq('error' => 'Not found.')
     end

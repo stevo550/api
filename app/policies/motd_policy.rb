@@ -19,6 +19,12 @@ class MotdPolicy < ApplicationPolicy
     user.admin?
   end
 
+  def permitted_attributes
+    if user.admin?
+      [:message, :staff_id]
+    end
+  end
+
   class Scope < Scope
     def resolve
       scope

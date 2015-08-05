@@ -22,4 +22,10 @@ class ProductPolicy < ApplicationPolicy
   def update?
     user.admin?
   end
+
+  def permitted_attributes
+    if user.admin?
+      [:name, :description, :img, :active, :hourly_price, :monthly_price, :setup_price, :product_type, provisioning_answers: [], tags: []]
+    end
+  end
 end

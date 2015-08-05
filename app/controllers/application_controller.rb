@@ -60,4 +60,8 @@ class ApplicationController < ActionController::Base
   def post_hook
     ActiveSupport::Notifications.instrument(controller_name + '#' + action_name + '/post_hook', params)
   end
+
+  def permitted_attributes(record)
+    params.permit(*policy(record).permitted_attributes)
+  end
 end

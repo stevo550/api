@@ -26,9 +26,8 @@ class GroupsController < ApplicationController
   error code: 422, desc: ParameterValidation::Messages.missing
 
   def create
-    group = Group.create group_params
-    authorize group
-    respond_with_params group
+    authorize Group
+    respond_with_params Group.create permitted_attributes Group
   end
 
   api :PUT, '/groups/:id', 'Updates group with :id'
@@ -41,7 +40,7 @@ class GroupsController < ApplicationController
 
   def update
     authorize group
-    group.update! group_params
+    group.update! permitted_attributes group
     respond_with_params group
   end
 
@@ -56,10 +55,6 @@ class GroupsController < ApplicationController
   end
 
   private
-
-  def group_params
-    params.permit!.slice(:name, :description, :staff_ids)
-  end
 
   def group
     @_group ||= (query_with Group.where(id: params.require(:id)), :includes).first || fail(ActiveRecord::RecordNotFound)

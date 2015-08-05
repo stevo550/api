@@ -27,6 +27,12 @@ class OrderItemPolicy < ApplicationPolicy
     admin_or_related
   end
 
+  def permitted_attributes
+    if user.admin?
+      [:uuid, :hourly_price, :monthly_price, :setup_price]
+    end
+  end
+
   private
 
   def admin_or_related

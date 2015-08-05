@@ -39,7 +39,7 @@ class ProjectQuestionsController < ApplicationController
 
   def create
     authorize ProjectQuestion
-    respond_with ProjectQuestion.create project_question_params
+    respond_with ProjectQuestion.create permitted_attributes ProjectQuestion
   end
 
   api :PUT, '/project_questions/:id', 'Updates project_question with :id'
@@ -54,7 +54,7 @@ class ProjectQuestionsController < ApplicationController
   error code: 422, desc: ParameterValidation::Messages.missing
 
   def update
-    respond_with project_question.update_attributes project_question_params
+    respond_with project_question.update_attributes permitted_attributes project_question
   end
 
   api :DELETE, '/project_questions/:id', 'Deletes project_question with :id'
@@ -78,10 +78,6 @@ class ProjectQuestionsController < ApplicationController
   end
 
   private
-
-  def project_question_params
-    params.permit(:question, :field_type, :help_text, :required, :position, options: [:option, :position, exclude: [], include: []])
-  end
 
   def project_question
     @project_question = ProjectQuestion.find(params.require(:id)).tap { |q| authorize q }

@@ -20,9 +20,8 @@ class ProductCategoriesController < ApplicationController
   error code: 422, desc: ParameterValidation::Messages.missing
 
   def create
-    @product_category = ProductCategory.create product_category_params
-    authorize @product_category
-    respond_with @product_category
+    authorize ProductCategory
+    respond_with ProductCategory.create filter_params product_category
   end
 
   api :PUT, '/product_categories', 'Creates a product category'
@@ -32,8 +31,7 @@ class ProductCategoriesController < ApplicationController
   error code: 422, desc: ParameterValidation::Messages.missing
 
   def update
-    authorize product_category
-    respond_with product_category.update! product_category_params
+    respond_with product_category.update! filter_params product_category
   end
 
   api :DELETE, '/groups/:id', 'Deletes product category with :id'
@@ -46,8 +44,8 @@ class ProductCategoriesController < ApplicationController
 
   private
 
-  def product_category_params
-    params.permit(:name, :description, :img, tags: []).tap { |p| p[:tag_list] = p.delete :tags }
+  def filter_params(record)
+    permitted_attributes(record).tap{ |p| p[:tag_list] = p.delete :tags }
   end
 
   def product_category

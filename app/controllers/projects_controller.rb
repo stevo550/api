@@ -50,7 +50,7 @@ class ProjectsController < ApplicationController
   def create
     authorize Project
     group_ids = current_user.admin? ? params[:group_ids] : params.require(:group_ids)
-    project = Project.create project_params.merge(group_ids: group_ids)
+    project = Project.create permitted_attributes(Project).merge(group_ids: group_ids)
     respond_with_params project
   end
 
@@ -64,7 +64,7 @@ class ProjectsController < ApplicationController
   def update
     authorize project
     group_ids = current_user.admin? ? params[:group_ids] : params.require(:group_ids)
-    project.update project_params.merge(group_ids: group_ids)
+    project.update permitted_attributes(project).merge(group_ids: group_ids)
     respond_with_params project
   end
 

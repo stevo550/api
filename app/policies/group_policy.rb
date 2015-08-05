@@ -18,4 +18,10 @@ class GroupPolicy < ApplicationPolicy
   def destroy?
     user.admin?
   end
+
+  def permitted_attributes
+    if user.admin?
+      [:name, :description, :staff_ids]
+    end
+  end
 end

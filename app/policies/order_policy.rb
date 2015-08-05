@@ -27,6 +27,12 @@ class OrderPolicy < ApplicationPolicy
     admin_or_related
   end
 
+  def permitted_attributes
+    if admin_or_related
+      [:id, :staff_id, :total, :bundle_id, options: [], order_items_attributes: [:id, :project_id, :product_id, :cloud_id]]
+    end
+  end
+
   private
 
   def admin_or_related

@@ -39,24 +39,22 @@ class MotdsController < ApplicationController
   error code: 404, desc: MissingRecordDetection::Messages.not_found
 
   def destroy
-    authorize motd
-    motd.destroy
-    respond_with_params motd
+    respond_with_params motd.destroy
   end
 
   private
 
   def motd_create_or_update
-    authorize motd
-    motd.update motd_params
+    motd.staff_id = current_user.id
+    motd.update permitted_attributes motd
     respond_with_params motd
   end
 
   def motd_params
-    params.permit(:message).merge(staff_id: current_user.id)
+    params.permit(:message)
   end
 
   def motd
-    @_motd ||= Motd.first_or_initialize
+    @_motd ||= Motd.first_or_initialize.tap { |m| authorize(m) }
   end
 end

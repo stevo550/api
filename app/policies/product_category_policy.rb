@@ -18,4 +18,10 @@ class ProductCategoryPolicy < ApplicationPolicy
   def destroy?
     user.admin?
   end
+
+  def permitted_attributes
+    if user.admin?
+      [:name, :description, :img, tags: []]
+    end
+  end
 end

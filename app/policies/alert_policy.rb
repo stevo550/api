@@ -20,6 +20,12 @@ class AlertPolicy < ApplicationPolicy
     user.admin?
   end
 
+  def permitted_attributes
+    if user.admin?
+      [:status, :message, :category, :start_date, :end_date, :alertable_type, :alertable_id]
+    end
+  end
+
   class Scope < Scope
     def resolve
       if user.admin?

@@ -1,18 +1,13 @@
 class ChargebacksController < ApplicationController
   after_action :verify_authorized
 
-  before_action :load_chargeback, only: [:show, :update, :destroy]
-  before_action :load_chargeback_params, only: [:create, :update]
-  before_action :load_chargebacks, only: [:index]
-
   api :GET, '/chargebacks', 'Returns a collection of chargebacks'
   param :includes, Array, required: false, in: %w(cloud product)
   param :page, :number, required: false
   param :per_page, :number, required: false
 
   def index
-    authorize Chargeback
-    respond_with_params @chargebacks
+    respond_with_params chargebacks
   end
 
   api :GET, '/chargebacks/:id', 'Shows chargeback with :id'
@@ -21,8 +16,7 @@ class ChargebacksController < ApplicationController
   error code: 404, desc: MissingRecordDetection::Messages.not_found
 
   def show
-    authorize @chargeback
-    respond_with_params @chargeback
+    respond_with_params chargeback
   end
 
   api :POST, '/chargebacks', 'Creates a chargeback'
@@ -32,10 +26,8 @@ class ChargebacksController < ApplicationController
   error code: 422, desc: ParameterValidation::Messages.missing
 
   def create
-    @chargeback = Chargeback.new @chargeback_params
-    authorize @chargeback
-    @chargeback.save
-    respond_with @chargeback
+    authorize Chargeback
+    respond_with Chargeback.create permitted_attributes Chargeback
   end
 
   api :PUT, '/chargeback/:id', 'Updates chargeback with :id'
@@ -47,10 +39,7 @@ class ChargebacksController < ApplicationController
   error code: 422, desc: ParameterValidation::Messages.missing
 
   def update
-    @chargeback.update_attributes @chargeback_params
-    authorize @chargeback
-    @chargeback.save
-    respond_with @chargeback
+    respond_with chargeback.update_attributes permitted_attributes chargeback
   end
 
   api :DELETE, '/chargeback/:id', 'Deletes chargeback with :id'
@@ -58,22 +47,19 @@ class ChargebacksController < ApplicationController
   error code: 404, desc: MissingRecordDetection::Messages.not_found
 
   def destroy
-    authorize @chargeback
-    @chargeback.destroy
-    respond_with @chargeback
+    respond_with chargeback.destroy
   end
 
   private
 
-  def load_chargeback_params
-    @chargeback_params = params.permit(:hourly_price, :cloud_id, :product_id)
+  def chargeback
+    @chargeback = Chargeback.find(params.require(:id)).tap { |c| authorize(c) }
   end
 
-  def load_chargeback
-    @chargeback = Chargeback.find(params.require(:id))
-  end
-
-  def load_chargebacks
-    @chargebacks = query_with Chargeback.all, :includes, :pagination
+  def chargebacks
+    @chargebacks ||= begin
+      authorize(Chargeback)
+      query_with Chargeback.all, :includes, :pagination
+    end
   end
 end

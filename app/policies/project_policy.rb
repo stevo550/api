@@ -36,6 +36,12 @@ class ProjectPolicy < ApplicationPolicy
     user.admin?
   end
 
+  def permitted_attributes
+    if user.admin?
+      [:id, :approved, :budget, :cc, :description, :start_date, :end_date, :img, :name, project_answers: [:project_question_id]]
+    end
+  end
+
   private
 
   def can?(action)

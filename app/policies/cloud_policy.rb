@@ -23,6 +23,12 @@ class CloudPolicy < ApplicationPolicy
     admin_or_related
   end
 
+  def permitted_attributes
+    if user.admin?
+      [:name, :description, :extra]
+    end
+  end
+
   class Scope < Scope
     def resolve
       scope

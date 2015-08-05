@@ -27,6 +27,12 @@ class ProjectQuestionPolicy < ApplicationPolicy
     user.admin?
   end
 
+  def permitted_attributes
+    if user.admin?
+      [:id, :question, :field_type, :help_text, :position, :required, options: [:option, :position, exclude: [], include: []]]
+    end
+  end
+
   class Scope < Scope
     def resolve
       scope

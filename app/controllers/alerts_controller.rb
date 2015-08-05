@@ -9,7 +9,6 @@ class AlertsController < ApplicationController
   param :per_page, :number, required: false
 
   def index
-    authorize Alert.new
     respond_with_params alerts
   end
 
@@ -18,7 +17,6 @@ class AlertsController < ApplicationController
   error code: 404, desc: MissingRecordDetection::Messages.not_found
 
   def show
-    authorize alert
     respond_with_params alert
   end
 
@@ -33,8 +31,7 @@ class AlertsController < ApplicationController
 
   def create
     authorize Alert
-    alert = Alert.create alert_params
-    respond_with_params alert
+    respond_with_params Alert.create permitted_attributes Alert
   end
 
   api :PUT, '/alerts/:id', 'Updates alert with given :id'
@@ -43,25 +40,23 @@ class AlertsController < ApplicationController
   param :category, String, required: false, desc: 'The category this alert is grouped under.'
   param :start_date, String, required: false, desc: 'Date this alert will begin appearing. Null indicates the alert will start appearing immediately.'
   param :end_date, String, required: false, desc: 'Date this alert should no longer be displayed after. Null indicates the alert does not expire.'
+  error code: 422, desc: ParameterValidation::Messages.missing
+  error code: 404, desc: MissingRecordDetection::Messages.not_found
 
   def update
-    authorize alert
-    alert.update alert_params
-    respond_with_params alert
+    respond_with_params alert.update permitted_attributes alert
   end
 
   api :DELETE, '/alerts/:id', 'Deletes alert with :id'
 
   def destroy
-    authorize alert
-    alert.destroy
-    respond_with alert
+    respond_with alert.destroy
   end
 
   private
 
   def alert
-    @_alert ||= Alert.find(params[:id])
+    @_alert ||= Alert.find(params[:id]).tap { |a| authorize(a) }
   end
 
   def alerts
@@ -70,7 +65,10 @@ class AlertsController < ApplicationController
     query = apply_not_status(query)
     query = apply_latest(query)
     query = apply_alertable_type(query)
-    @_alerts = query_with query.where(nil), :includes, :pagination
+    @_alerts ||= begin
+      authorize(Alert)
+      query_with query.where(nil), :includes, :pagination
+    end
   end
 
   def apply_alertable_type(query)
@@ -104,9 +102,5 @@ class AlertsController < ApplicationController
       end
     end
     query
-  end
-
-  def alert_params
-    @_alert_params ||= params.permit(:id, :status, :message, :category, :start_date, :end_date, :alertable_type, :alertable_id)
   end
 end

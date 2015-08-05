@@ -23,6 +23,12 @@ class ChargebackPolicy < ApplicationPolicy
     admin_or_related
   end
 
+  def permitted_attributes
+    if user.admin?
+      [:product_id, :cloud_id, :hourly_price]
+    end
+  end
+
   class Scope < Scope
     def resolve
       scope
