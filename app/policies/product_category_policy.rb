@@ -21,7 +21,7 @@ class ProductCategoryPolicy < ApplicationPolicy
 
   def permitted_attributes
     if user.admin?
-      [:name, :description, :img, tags: []]
+      [:id, :name, :description, :img, tags: []]
     end
   end
 end

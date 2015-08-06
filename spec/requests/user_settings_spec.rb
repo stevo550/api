@@ -52,7 +52,7 @@ RSpec.describe 'User Setting Options API' do
     it 'returns an error if the user setting option data is missing' do
       post user_setting_options_path
       expect(response.status).to eq(422)
-      expect(json).to eq('error' => 'param is missing or the value is empty: label')
+      expect(json).to eq('error' => 'Missing parameter label')
     end
   end
 

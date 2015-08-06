@@ -49,9 +49,8 @@ class StaffController < ApplicationController
   document_staff_params
 
   def create
-    staff = Staff.create staff_params
-    authorize staff
-    respond_with staff
+    authorize Staff
+    respond_with Staff.create permitted_attributes Staff
   end
 
   api :PUT, '/staff/:id', 'Updates a staff member with :id'
@@ -60,8 +59,7 @@ class StaffController < ApplicationController
   error code: 404, desc: MissingRecordDetection::Messages.not_found
 
   def update
-    staff.update_attributes staff_params
-    respond_with staff
+    respond_with staff.update_attributes permitted_attributes staff
   end
 
   api :DELETE, '/staff/:id', 'Deletes staff member with :id'
@@ -88,9 +86,5 @@ class StaffController < ApplicationController
         query_with Staff.all, :includes, :pagination
       end
     end
-  end
-
-  def staff_params
-    params.permit(:first_name, :last_name, :email, :role, :password, :password_confirmation)
   end
 end

@@ -41,7 +41,6 @@ class ProductsController < ApplicationController
 
   def create
     authorize Product
-    ap filter_params Product
     product = Product.new filter_params Product
 
     required_attributes = Rails.application.config.x.product_types.to_a.assoc(product.product_type.name)[1]['required']

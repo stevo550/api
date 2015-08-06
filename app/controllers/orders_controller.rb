@@ -33,7 +33,6 @@ class OrdersController < ApplicationController
 
   def create
     authorize Order
-    ap filter_params Order
     order = Order.new filter_params Order
 
     order.order_items.each do |oi|
@@ -91,7 +90,8 @@ class OrdersController < ApplicationController
   protected
 
   def filter_params(record)
-    permitted_attributes(record).store(:order_items_attributes, params.delete(:order_items))
+    params[:order_items_attributes] = params.delete :order_items
+    permitted_attributes record
   end
 
   def order

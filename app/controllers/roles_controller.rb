@@ -26,17 +26,15 @@ class RolesController < ApplicationController
   document_params required: true
 
   def create
-    role = Role.new role_params
-    authorize role
-    role.save
-    respond_with role
+    authorize Role
+    respond_with Role.create permitted_attributes Role
   end
 
   api :PUT, '/roles/:id', 'Update a role'
   document_params
 
   def update
-    respond_with_params role.update_attributes role_params
+    respond_with_params role.update_attributes permitted_attributes role
   end
 
   api :DELETE, '/roles/:id', 'Destroy a role'
@@ -45,10 +43,6 @@ class RolesController < ApplicationController
   end
 
   private
-
-  def role_params
-    params.permit(:name, :description, permissions: { projects: [], approvals: [], memberships: [] })
-  end
 
   def role
     @role = Role.find(params.require(:id)).tap { |r| authorize(r) }

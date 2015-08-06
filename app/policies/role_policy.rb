@@ -19,6 +19,12 @@ class RolePolicy < ApplicationPolicy
     user.admin?
   end
 
+  def permitted_attributes
+    if user.admin?
+      [:name, :description, permissions: [projects: [], approvals: [], memberships: []]]
+    end
+  end
+
   class Scope < Scope
     def resolve
       scope

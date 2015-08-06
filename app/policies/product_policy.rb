@@ -25,7 +25,7 @@ class ProductPolicy < ApplicationPolicy
 
   def permitted_attributes
     if user.admin?
-      [:name, :description, :img, :active, :hourly_price, :monthly_price, :setup_price, :product_type, provisioning_answers: [], tags: []]
+      [:id, :name, :description, :img, :active, :hourly_price, :monthly_price, :setup_price, :product_type, provisioning_answers: {}, tags: []]
     end
   end
 end

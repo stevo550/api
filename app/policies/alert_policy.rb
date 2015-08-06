@@ -22,7 +22,7 @@ class AlertPolicy < ApplicationPolicy
 
   def permitted_attributes
     if user.admin?
-      [:status, :message, :category, :start_date, :end_date, :alertable_type, :alertable_id]
+      [:id, :status, :message, :category, :start_date, :end_date, :alertable_type, :alertable_id]
     end
   end
 

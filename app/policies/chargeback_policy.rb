@@ -25,7 +25,7 @@ class ChargebackPolicy < ApplicationPolicy
 
   def permitted_attributes
     if user.admin?
-      [:product_id, :cloud_id, :hourly_price]
+      [:id, :product_id, :cloud_id, :hourly_price]
     end
   end
 

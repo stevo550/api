@@ -49,9 +49,7 @@ class ProjectsController < ApplicationController
 
   def create
     authorize Project
-    group_ids = current_user.admin? ? params[:group_ids] : params.require(:group_ids)
-    project = Project.create permitted_attributes(Project).merge(group_ids: group_ids)
-    respond_with_params project
+    respond_with_params Project.create filter_params Project
   end
 
   api :PUT, '/projects/:id', 'Updates project with :id'
@@ -63,9 +61,7 @@ class ProjectsController < ApplicationController
 
   def update
     authorize project
-    group_ids = current_user.admin? ? params[:group_ids] : params.require(:group_ids)
-    project.update permitted_attributes(project).merge(group_ids: group_ids)
-    respond_with_params project
+    respond_with_params project.update filter_params project
   end
 
   api :DELETE, '/projects/:id', 'Deletes project with :id'
@@ -80,15 +76,13 @@ class ProjectsController < ApplicationController
 
   private
 
-  def project_params
-    @_project_params ||= params.permit(:name, :description, :cc, :budget, :start_date, :end_date, :approved, :img, project_answers: [:project_question_id, :answer, :id]).tap do |project|
-      if params[:project_answers]
-        project[:project_answers_attributes] = project.delete(:project_answers)
-      end
-      if !current_user.admin? && !project[:id].nil?
-        project.delete(:budget)
-      end
+  def filter_params(record)
+    params.require(:group_ids) unless current_user.admin?
+    params[:project_answers_attributes] = params.delete :project_answers
+    if !current_user.admin? && !params[:id].nil?
+      params.delete(:budget)
     end
+    permitted_attributes record
   end
 
   def authorize_and_normalize(project)

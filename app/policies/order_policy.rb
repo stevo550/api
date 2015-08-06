@@ -29,7 +29,7 @@ class OrderPolicy < ApplicationPolicy
 
   def permitted_attributes
     if admin_or_related
-      [:id, :staff_id, :total, :bundle_id, options: [], order_items_attributes: [:id, :project_id, :product_id, :cloud_id]]
+      [:id, :staff_id, :total, :bundle_id, order_items_attributes: [:id, :product_id, :project_id, :cloud_id], options: []]
     end
   end
 

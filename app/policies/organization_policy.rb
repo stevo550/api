@@ -21,7 +21,7 @@ class OrganizationPolicy < ApplicationPolicy
 
   def permitted_attributes
     if user.admin?
-      [:name, :description, :image]
+      [:id, :name, :description, :image]
     end
   end
 

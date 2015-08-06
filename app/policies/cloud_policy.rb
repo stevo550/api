@@ -25,7 +25,7 @@ class CloudPolicy < ApplicationPolicy
 
   def permitted_attributes
     if user.admin?
-      [:name, :description, :extra]
+      [:id, :name, :description, :extra]
     end
   end
 

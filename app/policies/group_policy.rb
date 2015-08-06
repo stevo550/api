@@ -21,7 +21,7 @@ class GroupPolicy < ApplicationPolicy
 
   def permitted_attributes
     if user.admin?
-      [:name, :description, :staff_ids]
+      [:id, :name, :description, :staff_ids]
     end
   end
 end

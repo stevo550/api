@@ -38,7 +38,7 @@ class ProjectPolicy < ApplicationPolicy
 
   def permitted_attributes
     if user.admin?
-      [:id, :approved, :budget, :cc, :description, :start_date, :end_date, :img, :name, project_answers: [:project_question_id]]
+      [:approved, :budget, :cc, :description, :start_date, :end_date, :img, :name, project_answers_attributes: [:project_question_id, :answer], group_ids: []]
     end
   end
 

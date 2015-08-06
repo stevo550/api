@@ -23,7 +23,7 @@ class OrganizationsController < ApplicationController
 
   def create
     authorize Organization
-    respond_with Organization.new permitted_attributes Organization
+    respond_with Organization.create permitted_attributes Organization
   end
 
   api :PUT, '/organizations/:id', 'Updates organization with :id'

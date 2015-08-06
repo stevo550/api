@@ -23,6 +23,11 @@ class ServicePolicy < ApplicationPolicy
     true
   end
 
+  def permitted_parameters
+    if user.admin?
+    end
+  end
+
   def admin_or_related
     user.admin? || user.project_ids.include?(record.project_id)
   end

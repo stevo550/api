@@ -23,6 +23,12 @@ class UserSettingOptionPolicy < ApplicationPolicy
     admin_or_related
   end
 
+  def permitted_attributes
+    if admin_or_related
+      [:label, :field_type, :help_text, :options, :required]
+    end
+  end
+
   class Scope < Scope
     def resolve
       scope

@@ -29,7 +29,7 @@ class OrderItemPolicy < ApplicationPolicy
 
   def permitted_attributes
     if user.admin?
-      [:uuid, :hourly_price, :monthly_price, :setup_price]
+      [:id, :uuid, :hourly_price, :monthly_price, :setup_price]
     end
   end
 

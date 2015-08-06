@@ -51,6 +51,12 @@ class StaffPolicy < ApplicationPolicy
     admin_or_self
   end
 
+  def permitted_attributes
+    if admin_or_self
+      [:email, :first_name, :last_name, :role, :password, :password_confirmation]
+    end
+  end
+
   class Scope < Scope
     def resolve
       scope

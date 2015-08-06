@@ -23,6 +23,11 @@ class SettingPolicy < ApplicationPolicy
     user.admin?
   end
 
+  def permitted_parameters
+    if user.admin?
+    end
+  end
+
   class Scope < Scope
     def resolve
       scope
