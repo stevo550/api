@@ -45,7 +45,7 @@ class ProductCategoriesController < ApplicationController
   private
 
   def filter_params(record)
-    permitted_attributes(record).tap{ |p| p[:tag_list] = p.delete :tags }
+    permitted_attributes(record).tap { |p| p[:tag_list] = p.delete :tags }
   end
 
   def product_category

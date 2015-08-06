@@ -85,7 +85,7 @@ class ProductsController < ApplicationController
   private
 
   def filter_params(record)
-    permitted_attributes(record).merge(params.slice(:provisioning_answers)).tap{ |p| p[:tag_list] = p.delete :tags }
+    permitted_attributes(record).merge(params.slice(:provisioning_answers)).tap { |p| p[:tag_list] = p.delete :tags }
   end
 
   def product

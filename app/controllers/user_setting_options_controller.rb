@@ -26,18 +26,11 @@ class UserSettingOptionsController < ApplicationController
 
   def create
     authorize UserSettingOption
-    user_setting_option = UserSettingOption.new permitted_attributes UserSettingOption
-    if id_for_user_setting_option_label.nil?
-      if user_setting_option.save
-        respond_with user_setting_option
-      else
-        respond_with user_setting_option.errors, status: :unprocessable_entity
-      end
-    else # ON DUPLICATE KEY UPDATE
-      params[:id] = id_for_user_setting_option_label
-      user_setting_option
-      update
-    end
+    user_setting_option = UserSettingOption.new create_params UserSettingOption
+    respond_with user_setting_option.save || user_setting_option.errors, status: :unprocessable_entity unless id_for_user_setting_option_label.nil?
+    # ON DUPLICATE KEY UPDATE
+    params[:id] = id_for_user_setting_option_label
+    update
   end
 
   api :PUT, '/user_setting_options/:id', 'Updates user setting option with :id'
@@ -50,8 +43,7 @@ class UserSettingOptionsController < ApplicationController
   error code: 422, desc: ParameterValidation::Messages.missing
 
   def update
-    respond_with user_setting_option.update_attributes(permitted_attributes(user_setting_option)) ||
-                   user_setting_option.errors, status: :unprocessable_entity
+    respond_with user_setting_option.update_attributes(update_params(user_setting_option)) || user_setting_option.errors, status: :unprocessable_entity
   end
 
   api :GET, '/user_setting_options/new', 'Get new setting JSON'
@@ -79,15 +71,17 @@ class UserSettingOptionsController < ApplicationController
 
   private
 
-  def permitted_attributes(record)
-    if record.new_record?
-      params.require(:label)
-      params.require(:field_type)
-      params.require(:help_text)
-      params.require(:options)
-      params.require(:required)
-    end
-    params.permit(*policy(record).permitted_attributes)
+  def create_params(record)
+    params.require(:label)
+    params.require(:field_type)
+    params.require(:help_text)
+    params.require(:options)
+    params.require(:required)
+    permitted_attributes record
+  end
+
+  def update_params(record)
+    permitted_attributes record
   end
 
   def user_setting_options
